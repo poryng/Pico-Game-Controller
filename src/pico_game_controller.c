@@ -109,9 +109,12 @@ void joy_mode() {
 
       prev_enc_val[i] = enc_val[i];
     }
-
-    report.joy0 = ((double)cur_enc_val[0] / ENC_PULSE) * (UINT8_MAX + 1);
-    report.joy1 = ((double)cur_enc_val[1] / ENC_PULSE) * (UINT8_MAX + 1);
+const float joy_sens = 2.0f;
+float val0 = ((double)cur_enc_val[0] / ENC_PULSE) * 256.0f * joy_sens;
+float val1 = ((double)cur_enc_val[1] / ENC_PULSE) * 256.0f * joy_sens;
+    
+   report.joy0 = (uint8_t)((int)val0 % 256);
+   report.joy1 = (uint8_t)((int)val1 % 256);
 
     tud_hid_n_report(0x00, REPORT_ID_JOYSTICK, &report, sizeof(report));
   }
